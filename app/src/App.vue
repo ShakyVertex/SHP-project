@@ -1,7 +1,7 @@
 <template lang="en">
   <div>
     <Header></Header>
-    I am the root component
+    <router-view></router-view>
     <Footer></Footer>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 export default {
-  name: "app-default",
+  name: 'app-default',
   components: {
     Header,
     Footer
