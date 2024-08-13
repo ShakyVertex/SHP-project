@@ -7,7 +7,6 @@
           <p>尚品汇欢迎您！</p>
           <p>
             <span>请</span>
-            <!-- 声明式导航：务必要有to属性 -->
             <router-link to="/login">登录</router-link>
             <router-link class="register" to="/register">免费注册</router-link>
           </p>
@@ -37,6 +36,7 @@
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
+            v-model="keyword"
           />
           <button class="sui-btn btn-xlarge btn-danger" type="button" @click="goSearch">
             搜索
@@ -50,10 +50,18 @@
 <script>
 export default {
     name: 'header-component',
+    data() {
+      return {
+        keyword: ''
+      }
+    },
     methods: {
       goSearch() {
-        // 搜索按钮的回调函数：需要像search路由进行跳转
-        this.$router.push('/search')
+        this.$router.push({
+          name: 'search',
+          params: {keyword: this.keyword},
+          query: {k: this.keyword.toUpperCase()}
+        })
       }
     }
 };
