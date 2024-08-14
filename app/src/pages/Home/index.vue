@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import TypeNav from '@/pages/Home/TypeNav'
 import ListContainer from '@/pages/Home/ListContainer'
 import Recommend from '@/pages/Home/Recommend'
 import Rank from '@/pages/Home/Rank'
 import Like from '@/pages/Home/Like'
 import Floor from '@/pages/Home/Floor'
 import Brand from '@/pages/Home/Brand'
+import TypeNav from '../../components/TypeNav'
 export default {
     name: 'home-page',
     components: {
@@ -29,8 +29,8 @@ export default {
         Like,
         Floor,
         Brand,
-        TypeNav
-    }
+        TypeNav,
+    },
 }
 </script>
 
