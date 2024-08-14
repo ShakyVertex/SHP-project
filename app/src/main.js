@@ -7,6 +7,10 @@ Vue.component(TypeNav.name, TypeNav)
 // 引入路由
 import router from '@/router'
 
+// test
+import { reqCategoryList } from './api'
+reqCategoryList()
+
 new Vue({
   render: h => h(App),
   // 注册路由
