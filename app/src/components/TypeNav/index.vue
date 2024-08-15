@@ -1,48 +1,51 @@
 <template lang="en">
 <!-- 商品分类导航 -->
 <div class="type-nav">
-            <div class="container">
-                <div @mouseleave="leaveIndex">
-                    <h2 class="all">全部商品分类</h2>
-                    <!-- 一级分类 -->
-                    <div class="sort">
-                    <div class="all-sort-list2" @click="goSearch">
-                        <div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId" :class="{cur:currentIndex==index}">
-                            <h3 @mouseenter="changeIndex(index)">
-								<a :data-categoryName="c1.categoryName" :data-categoryId="c1.categoryId">{{ c1.categoryName }}</a>
-                            </h3>
-                            <!-- 二级分类 -->
-                            <div class="item-list clearfix" :style="{display:currentIndex==index?'block':'none'}">
-                                <div class="subitem" v-for="(c2, index) in c1.categoryChild" :key="c2.categoryId">
-                                    <!-- 三级分类 -->
-                                    <dl class="fore">
-                                        <dt>
-											<a :data-categoryName="c2.categoryName" :data-categoryId="c2.categoryId">{{ c2.categoryName }}</a>
-                                        </dt>
-                                        <dd>
-                                            <em v-for="(c3, index) in c2.categoryChild" :key="c3.categoryId">
-                                                <a :data-categoryName="c3.categoryName" :data-categoryId="c3.categoryId">{{ c3.categoryName }}</a>
-                                            </em>
-                                        </dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                <nav class="nav">
-                    <a href="###">服装城</a>
-                    <a href="###">美妆馆</a>
-                    <a href="###">尚品汇超市</a>
-                    <a href="###">全球购</a>
-                    <a href="###">闪购</a>
-                    <a href="###">团购</a>
-                    <a href="###">有趣</a>
-                    <a href="###">秒杀</a>
-                </nav>
-            </div>
-        </div>
+	<div class="container">
+		<div @mouseleave="leaveShow" @mouseenter="enterShow">
+			<h2 class="all">全部商品分类</h2>
+			<!-- 过渡动画 -->
+			<transition name="sort">
+			<!-- 一级分类 -->
+			<div class="sort" v-show="show">
+				<div class="all-sort-list2" @click="goSearch">
+				<div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId" :class="{cur:currentIndex==index}">
+				<h3 @mouseenter="changeIndex(index)">
+					<a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{ c1.categoryName }}</a>
+				</h3>
+				<!-- 二级分类 -->
+				<div class="item-list clearfix" :style="{display:currentIndex==index?'block':'none'}">
+					<div class="subitem" v-for="(c2, index) in c1.categoryChild" :key="c2.categoryId">
+						<!-- 三级分类 -->
+						<dl class="fore">
+							<dt>
+								<a :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{ c2.categoryName }}</a>
+							</dt>
+							<dd>
+								<em v-for="(c3, index) in c2.categoryChild" :key="c3.categoryId">
+									<a :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{ c3.categoryName }}</a>
+								</em>
+							</dd>
+						</dl>
+					</div>
+					</div>
+				</div>
+				</div>
+			</div>
+			</transition>
+		</div>
+		<nav class="nav">
+			<a href="###">服装城</a>
+			<a href="###">美妆馆</a>
+			<a href="###">尚品汇超市</a>
+			<a href="###">全球购</a>
+			<a href="###">闪购</a>
+			<a href="###">团购</a>
+			<a href="###">有趣</a>
+			<a href="###">秒杀</a>
+		</nav>
+	</div>
+</div>
 </template>
 
 <script>
@@ -53,10 +56,11 @@ export default {
 	data() {
 		return {
 			currentIndex: -1,
+			show: true,
 		};
 	},
 	mounted() {
-		this.$store.dispatch("categoryList")
+		if (this.$route.path != '/home') this.show = false
 	},
 	computed: {
 		...mapState({
@@ -86,10 +90,25 @@ export default {
 					query.category3Id = category3id
 				}
 
-				location.query = query
-				this.$router.push(location)
+				if (this.$route.params) {
+					location.params = this.$route.params
+					location.query = query
+
+					console.log(location.params)
+					console.log(location.query)
+					this.$router.push(location)
+				}
 			}
-		}
+		},
+		enterShow() {
+			if (this.$route.path != '/home') this.show = true
+		},
+		leaveShow() {
+			this.currentIndex = -1
+			if (this.$route.path != '/home') {
+				this.show = false
+			}
+		},
 	},
 };
 </script>
@@ -209,6 +228,18 @@ export default {
 					background: skyblue;
 				}
 			}
+		}
+
+		.sort-enter {
+			height: 0px;
+		}
+		
+		.sort-enter-to {
+			height: 461px;
+		}
+
+		.sort-enter-active {
+			transition: all .5s linear;
 		}
 	}
 }
