@@ -4,6 +4,7 @@ import TypeNav from './components/TypeNav'
 import router from '@/router'
 import store from '@/store'
 import '@/mock/mockServe'
+import 'swiper/css/swiper.css'
 
 Vue.component(TypeNav.name, TypeNav)
 
