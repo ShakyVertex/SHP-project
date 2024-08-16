@@ -109,23 +109,29 @@ export default {
     name: 'list-container',
     mounted() {
         this.$store.dispatch('getBannerList')
-        setTimeout(() => {
-            var mySwiper = new Swiper(document.querySelector('.swiper-container'), {
-                loop: true,
-                pagination: {
-                    el: '.swiper-pagination',
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                }
-            })
-        }, 1000)
     },
     computed: {
         ...mapState({
             bannerList: state => state.home.bannerList
         })
+    },
+    watch: {
+        bannerList: {
+            handler(newValue, oldValue) {
+                this.$nextTick(() => {
+                    var mySwiper = new Swiper(document.querySelector('.swiper-container'), {
+                        loop: true,
+                        pagination: {
+                            el: '.swiper-pagination',
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        }
+                    })
+                })
+            }
+        }
     }
 }
 </script>
