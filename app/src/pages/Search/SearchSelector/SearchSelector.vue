@@ -3,8 +3,9 @@
     <div class="type-wrap logo">
       <div class="fl key brand">品牌</div>
       <div class="value logos">
+        <!-- 品牌 -->
         <ul class="logo-list">
-          <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId">{{ trademark.tmName }}</li>
+          <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId" @click="tradeMarkHandler(trademark)">{{ trademark.tmName }}</li>
         </ul>
       </div>
       <div class="ext">
@@ -12,11 +13,12 @@
         <a href="javascript:void(0);">更多</a>
       </div>
     </div>
+    <!-- 平台售卖属性 -->
     <div class="type-wrap" v-for="(attr, index) in attrsList" :key="attr">
       <div class="fl key">{{ attr.attrName }}</div>
       <div class="fl value">
         <ul class="type-list">
-          <li v-for="(attrValue, index) in attr.attrValueList" :key="index">
+          <li v-for="(attrValue, index) in attr.attrValueList" :key="attrValue" @click="attrInfo(attr, attrValue)">
             <a>{{ attrValue }}</a>
           </li>
         </ul>
@@ -32,6 +34,14 @@
     name: 'SearchSelector',
     computed: {
       ...mapGetters(['trademarkList', 'attrsList']),
+    },
+    methods: {
+      tradeMarkHandler(trademark) {
+        this.$emit('trademarkInfo', trademark)
+      },
+      attrInfo(attr, attrValue) {
+        this.$emit('attrInfo', attr, attrValue)
+      }
     }
   }
 </script>
