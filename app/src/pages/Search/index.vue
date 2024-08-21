@@ -12,10 +12,7 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li>
+            <li class="with-x" v-if="searchParams.categoryName">{{ searchParams.categoryName }}<i @click="removeCategoryName">x</i></li>
           </ul>
         </div>
 
@@ -140,11 +137,7 @@
       }
     },
     beforeMount() {
-      this.searchParams.category1Id = this.$route.query.category1Id
-      this.searchParams.category2Id = this.$route.query.category2Id
-      this.searchParams.category3Id = this.$route.query.category3Id
-      this.searchParams.categoryName = this.$route.query.categoryName
-      this.searchParams.keyword = this.$route.params.keyword
+      Object.assign(this.searchParams, this.$route.query, this.$route.params)
     },
     mounted() {
       // 先测试接口返回的数据格式
@@ -157,6 +150,28 @@
       // 像服务器发请求返回商品展示
       getData() {
         this.$store.dispatch('getSearchList', this.searchParams)
+      },
+      removeCategoryName() {
+        this.searchParams.categoryName = undefined
+        this.searchParams.category1Id = undefined
+        this.searchParams.category2Id = undefined
+        this.searchParams.category3Id = undefined
+        this.getData()
+        if (this.$route.params) {
+          this.$router.push({
+            name: 'search',
+            params: this.$route.params,
+          })
+        }
+      }
+    },
+    watch: {
+      $route(newValue, oldValue) {
+        Object.assign(this.searchParams, this.$route.query, this.$route.params)
+        this.getData()
+        this.searchParams.category1Id = undefined
+        this.searchParams.category2Id = undefined
+        this.searchParams.category3Id = undefined
       }
     }
   }
