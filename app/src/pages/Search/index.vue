@@ -34,25 +34,23 @@
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
-              <!-- 价格结构 -->
+              <!-- 排序结构 -->
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isOne }" @click="changeOrder('1')">
+                  <a>综合&nbsp;
+                    <span v-show="isOne">
+                      <span v-if="searchParams.order.indexOf('asc') != -1"><b>⬆</b></span>
+                      <span v-else><b>⬇</b></span>
+                    </span>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: isTwo }" @click="changeOrder('2')">
+                  <a>价格&nbsp;
+                    <span v-show="isTwo" @click="changeOrder">
+                      <span v-if="searchParams.order.indexOf('asc') != -1"><b>⬆</b></span>
+                      <span v-else><b>⬇</b></span>
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -139,7 +137,7 @@
           category3Id: "",
           categoryName: "",
           keyword: "",
-          order: "",
+          order: "1:desc",
           pageNo: 1,
           pageSize: 10,
           props: [],
@@ -155,7 +153,13 @@
       this.getData()
     },
     computed: {
-      ...mapGetters(['goodsList'])
+      ...mapGetters(['goodsList']),
+      isOne() {
+        return this.searchParams.order.indexOf('1') != -1
+      },
+      isTwo() {
+        return this.searchParams.order.indexOf('2') != -1
+      }
     },
     methods: {
       // 像服务器发请求返回商品展示
@@ -202,6 +206,20 @@
       removeAttr(index) {
         // splice 方法在这里删除从index开始的1个元素
         this.searchParams.props.splice(index, 1)
+        this.getData()
+      },
+      changeOrder(flag) {
+        let originOrder = this.searchParams.order
+        let originFlag = this.searchParams.order.split(':')[0]
+        let originSort = this.searchParams.order.split(':')[1]
+
+        let newOrder = ''
+        if (flag == originFlag) {
+          newOrder = `${originFlag}:${originSort == 'desc'?'asc':'desc'}`
+        } else {
+          newOrder = `${flag}:desc`
+        }
+        this.searchParams.order = newOrder
         this.getData()
       }
     },
